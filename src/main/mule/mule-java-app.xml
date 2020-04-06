@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="efa8f84f-8e4d-4fdf-91c2-b37959b977d5" >
+		<http:listener-connection host="0.0.0.0" port="8083" />
+	</http:listener-config>
+	<flow name="mule-java-appFlow" doc:id="00026330-bee2-4779-8d68-b5a8550da761" >
+		<http:listener doc:name="Listener" doc:id="6a23db7f-6a35-413c-9f65-9b900bc41232" config-ref="HTTP_Listener_config" path="/greet"/>
+		<ee:transform doc:name="Transform Message" doc:id="b3d70e5c-f428-46e7-b870-c28fe445bc29" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"Hello" ++ " " ++ payload.employee.first_name ++ " " ++ payload.employee.last_name]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="ac9b6b26-704a-44fe-9b74-48b39f372b56" message="#[payload]" category="before"/>
+		<ee:transform doc:name="Transform Message" doc:id="a7116097-137a-4d90-83dc-bcef390d956b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+
+---
+java!com::abc::util::Stringmanipulate::ToCamel(payload)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="badd0ae4-5004-42f7-bbc4-e75164c3542b" message="#[payload]" category="after"/>
+	</flow>
+</mule>
