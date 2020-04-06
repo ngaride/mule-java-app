@@ -25,7 +25,7 @@ output application/java
 output text/plain
 
 ---
-java!com::abc::util::Stringmanipulate::ToCamel(payload)]]></ee:set-payload>
+java!com::abc::util::Stringmanipulation::ToCamel(payload)]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="badd0ae4-5004-42f7-bbc4-e75164c3542b" message="#[payload]" category="after"/>
